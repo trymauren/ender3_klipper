@@ -13,6 +13,10 @@
 # you need them later. We might change from xinzhao to another desktop
 # computer if it lacks the necessary computational power.
 
+# After keys have been generated and the content below has been saved to the
+# correct location, you may login using 'ssh ender3_klipper'. Depending on
+# where in the world you sit, you may need to authenticate using your uio
+# password and 2FA code.
 
 Host uio
     Hostname login.uio.no
