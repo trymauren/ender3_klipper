@@ -1,0 +1,37 @@
+# To setup a ssh key which you can use:
+# ssh-keygen -t ed25519 -f ~/.ssh/[RPI_KEY_NAME]
+# Copy the content of ~/.ssh/[RPI_KEY_NAME].pub and send it to tsauren@uio.no
+
+# If you dont already have a key for uio ssh login, do:
+# ssh-keygen -t ed25519 -f ~/.ssh/[UIO_KEY_NAME]
+
+# This is one way to do ssh, but it can of course be done in many other ways.
+# The content below (if to be used) should be saved to ~/.ssh/config on your
+# pc. Note that some fields must be changed.
+# Also note that while xinzhao is the only machine used for this project, the
+# other ssh login machines at robin (such as dancer & comet) are included if
+# you need them later. We might change from xinzhao to another desktop
+# computer if it lacks the necessary computational power.
+
+
+Host uio
+    Hostname login.uio.no
+    User [UIO_USER]
+    IdentityFile ~/.ssh/[UIO_KEY_NAME]
+    IdentitiesOnly yes
+    ForwardAgent yes
+    AddKeysToAgent yes
+
+Host dancer dunder rudolph deepthinker comet cupid xinzhao
+    Hostname %h.ifi.uio.no
+    User [UIO_USER]
+    ProxyJump uio
+
+Host ender3_klipper
+    Hostname klipper.labnet
+    User in5490
+    IdentityFile ~/.ssh/[RPI_KEY_NAME]
+    ProxyJump xinzhao # Since the RPi is on the labnet wlan, we must go through a computer which is both on the labnet and expose ssh login.
+    LocalForward 7125 localhost:7125 # Moonraker API
+    LocalForward 8080 localhost:80 # Mainsail web interface (nginx)
+    # LocalForward 7136 localhost:7136 # default HTTP port for fluidd (not used, since we use Mainsail)
