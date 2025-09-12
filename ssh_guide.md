@@ -71,6 +71,9 @@ After connecting, you can access these services locally:
 - **Moonraker API:** http://localhost:7125
 - **Mainsail Web Interface:** http://localhost:8080
 
+Note that the ssh session must be active for these to work.
+
+
 ## Additional Robin Machines
 
 While `xinzhao` is the primary machine for this project, you have access to other Robin cluster machines:
