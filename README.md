@@ -1,4 +1,5 @@
 # ROBIN Ender3 with Klipper tech stack (or something like that)
+See `ssh_template.md` for instructions on connecting to the 3d-printer.
 
 ## Printer firmware and host software
 
