@@ -4,23 +4,33 @@ Klipper API Interaction Script
 Demonstrates how to interact with Klipper through the Moonraker API
 """
 
-import requests
 import json
 import time
-from typing import Dict, Any, Optional
+from io import BytesIO
+from typing import Any, Dict, Optional
+
+import cv2
+import numpy as np
+import requests
+from PIL import Image
 from termcolor import colored
 
 
 def niceprint(text):
-    print((colored(text, 'green')))
+    print((colored(text, "green")))
 
 
 def badprint(text):
-    print((colored(text, 'red')))
+    print((colored(text, "red")))
 
 
 class MoonrakerConnector:
-    def __init__(self, host: str = "localhost", port: int = 7125):
+    def __init__(
+        self,
+        host: str = "localhost",
+        port: int = 7125,
+        webcam_url_extension: str = "8080/webcam/?action=",
+    ):
         """
         Initialize Klipper API connection
 
@@ -29,6 +39,8 @@ class MoonrakerConnector:
             port: Moonraker port (default: 7125)
         """
         self.base_url = f"http://{host}:{port}"
+        self.webcam_url_snapshot = f"http://{host}:{webcam_url_extension}snapshot"
+        self.webcam_url_stream = f"http://{host}:{webcam_url_extension}stream"
         self.verify_connection()
 
     def verify_connection(self):
@@ -49,12 +61,13 @@ class MoonrakerConnector:
         """
         try:
             response = requests.get(
-                f"{self.base_url}/printer/objects/query",
-                params="motion_report"
+                f"{self.base_url}/printer/objects/query", params="motion_report"
             )
             response.raise_for_status()
             data = response.json()
-            motion_report = data.get("result", {}).get("status", {}).get("motion_report", {})
+            motion_report = (
+                data.get("result", {}).get("status", {}).get("motion_report", {})
+            )
             return motion_report
 
         except requests.exceptions.RequestException as e:
@@ -73,8 +86,7 @@ class MoonrakerConnector:
         """
         try:
             response = requests.post(
-                f"{self.base_url}/printer/gcode/script",
-                json={"script": gcode}
+                f"{self.base_url}/printer/gcode/script", json={"script": gcode}
             )
             response.raise_for_status()
             return True
@@ -102,7 +114,7 @@ class MoonrakerConnector:
         x: Optional[float] = None,
         y: Optional[float] = None,
         z: Optional[float] = None,
-        feedrate: int = 3000
+        feedrate: int = 3000,
     ) -> bool:
         """
         Move toolhead to specified position
@@ -161,6 +173,42 @@ class MoonrakerConnector:
             badprint(f"Error getting system info: {e}")
             return {}
 
+    def take_snapshot(self) -> bool:
+        """
+        Take snapshot. Uses default webcam.
+
+        Returns:
+            The snapshot as ...
+        """
+        try:
+            response = requests.get(self.webcam_url_snapshot, timeout=5)
+            response.raise_for_status()
+
+            img = Image.open(BytesIO(response.content))
+            return img
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error getting snapshot: {e}")
+            return None
+
+    def get_frame_from_stream(self):
+        """Capture a single frame from the MJPEG stream"""
+
+        # Open the stream
+        cap = cv2.VideoCapture(self.webcam_url_stream)
+
+        if cap.isOpened():
+            ret, frame = cap.read()
+            cap.release()
+
+            if ret:
+                return frame
+            else:
+                badprint("Failed to return frame")
+        else:
+            badprint("Failed to open stream")
+        return None
+
 
 def main():
     print("Klipper API Interaction Demo")
@@ -169,25 +217,27 @@ def main():
     try:
         # Connect to Klipper
         klipper = MoonrakerConnector(host="localhost", port=7125)
-
+        print(klipper.take_snapshot())
+        print(klipper.get_frame_from_stream())
         # Get and display motion report
         print("\nCurrent Toolhead motion report:")
         motion_report = klipper.get_motion_report()
         if motion_report:
-            print(f'Live position: {motion_report['live_position']}')
-            print(f'Live velocity: {motion_report['live_velocity']}')
-            print(f'Live extruder velocity: {motion_report['live_extruder_velocity']}')
-            print(f'Steppers: {motion_report['steppers']}')
+            print(f"Live position: {motion_report['live_position']}")
+            print(f"Live velocity: {motion_report['live_velocity']}")
+            print(f"Live extruder velocity: {motion_report['live_extruder_velocity']}")
+            print(f"Steppers: {motion_report['steppers']}")
 
         # Set absolute positioning
         if klipper.execute_gcode("G90"):
             niceprint("Set absolute positioning (G90)")
-
-        # You can uncomment these to test movement (be careful!)
-        klipper.home_axes("XY")  # Home X and Y axes
-        time.sleep(2)
-        klipper.move_toolhead(x=100, y=100, feedrate=6000)  # Move to X100 Y100
-
+        print("Printer will move toolhead. 'y' to continue, 'n' to abort.")
+        inp = input()
+        if inp == "y":
+            klipper.home_axes("XYZ")  # Home X and Y axes
+            time.sleep(2)
+            # Move to X100 Y100
+            klipper.move_toolhead(x=100, y=100, feedrate=6000)
     except Exception as e:
         print(f"\n❌ Error: {e}")
         print("\nTroubleshooting:")
