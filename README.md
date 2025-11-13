@@ -1,7 +1,7 @@
 # ROBIN Ender3 with Klipper tech stack (or something like that)
 See `ssh_guide.md` for instructions on connecting to the 3d-printer.
 
-[![Illustration](https://www.github.com/trymauren/ender3_klipper/illustration.png)](https://www.github.com/trymauren/ender3_klipper/illustration.png)
+[![Illustration](https://www.github.com/trymauren/ender3_klipper/blob/main/illustration.png)](https://www.github.com/trymauren/ender3_klipper/blob/main/illustration.png)
 
 
 ## Printer firmware and host software
