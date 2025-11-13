@@ -15,7 +15,7 @@ Socket. Tornado is used to provide Moonraker's server functionality."
 ### [Mainsail](https://github.com/mainsail-crew/mainsail) ([Docs](https://docs.mainsail.xyz/setup/getting-started))
 "Makes Klipper more accessible by adding a lightweight, responsive web user
 interface, centred around an intuitive and consistent design philosophy."
-[![Illustration](https://www.github.com/trymauren/ender3_klipper/blob/main/illustration.png)](https://www.github.com/trymauren/ender3_klipper/blob/main/illustration.png)
+[![Illustration](https://www.github.com/trymauren/ender3_klipper/blob/main/mainsail.png)](https://www.github.com/trymauren/ender3_klipper/blob/main/mainsail.png)
 
 ### [KlipperScreen](https://github.com/KlipperScreen/KlipperScreen) ([Docs](https://klipperscreen.github.io/KlipperScreen/))
 "KlipperScreen is a touchscreen GUI that interfaces with Klipper via Moonraker.
