@@ -1,5 +1,7 @@
 # Klipper Flashing Instructions for Robin Ender3 V3 SE
 
+Assumes Klipper is installed on the host.
+
 **On the RPi host**:
 1. Navigate to the Klipper directory:
    ```bash
@@ -18,7 +20,7 @@
    - **Bootloader offset:** 28KiB bootloader
    - **Communication interface:** Serial (on USART1 PA10/PA9)
 
-The Robin Ender3 V3 SE used has an older motherboard and requires the above make settings.
+The Ender3 V3 SE used has an older motherboard and requires the above make settings.
 Ignore other suggestions online. Note that other Ender3 printers at ROBIN may require
 other settings, as they may have a different motherboard.
 

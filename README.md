@@ -13,8 +13,8 @@ Communication between the Klippy host and Moonraker is done over a Unix Domain
 Socket. Tornado is used to provide Moonraker's server functionality."
 
 ### [Mainsail](https://github.com/mainsail-crew/mainsail) ([Docs](https://docs.mainsail.xyz/setup/getting-started))
-Makes Klipper more accessible by adding a lightweight, responsive web user
-interface, centred around an intuitive and consistent design philosophy.
+"Makes Klipper more accessible by adding a lightweight, responsive web user
+interface, centred around an intuitive and consistent design philosophy."
 
 ### [KlipperScreen](https://github.com/KlipperScreen/KlipperScreen) ([Docs](https://klipperscreen.github.io/KlipperScreen/))
 "KlipperScreen is a touchscreen GUI that interfaces with Klipper via Moonraker.
@@ -31,10 +31,10 @@ required for running a Klipper based system on an RPi host.
 ## Hardware
 
 #### Host (computer connected to the printer(s)):
-- RPi 3b+ with 4gb ram. Could be any RPi (I think).
+- RPi 3b+ with 4gb ram. Could be any RPi with enough computational capacity.
 
 #### Printer:
-- Ender3 V3 SE (note: old motherboard, see below for flash config)
+- Ender3 V3 SE (note: old motherboard, see `klipper-flash-instructions.md` for instructions on flashing Klipper firmware on this printer).
 
 #### Touchscreen
 - Since the Ender3 screen cannot be used with the setup, a RPi 7" screen is used.
